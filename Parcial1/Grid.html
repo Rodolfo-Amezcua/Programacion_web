@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        box-sizing: border-box;
+        margin: 0;
+        height: 0;
+
+    }
+    .contenedor{
+        height: 100vh;
+        width: 100vw;
+        background-color: blue;
+        display: grid;
+        grid-template-columns: 200px 200px 200px;
+        grid-template-rows: 200px 200px 200px;
+        justify-content: center;
+        align-items: center;
+        justify-items: stretch;
+    }
+
+    .caja{
+        
+        height: 100px;
+        background-color: aqua;
+        border: 1px dashed blue;
+
+    }
+    #caja1{
+        grid-column-start: 1;
+        grid-column-end: 3;
+        align-self: start;
+    }
+</style>
+</head>
+<body>
+<div class="contenedor">
+    <div id="caja1" class="caja">caja1</div>
+    <div id="caja2" class="caja">caja2</div>
+    <div id="caja3" class="caja">caja3</div>
+    <div id="caja4" class="caja">caja4</div>
+    <div id="caja5" class="caja">caja5</div>
+    <div id="caja6" class="caja">caja6</div>
+
+   
+</div>
+</body>
+</html>
