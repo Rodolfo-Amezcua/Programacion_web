@@ -1,6 +1,6 @@
 @color-principal: blue;
 @color-secundario: aqua;
-@letra: red;
+
 
 h1{
     text-align: center;
@@ -79,16 +79,13 @@ hr{
    
 
 input:checked+div#contenedors{
-    background-color: var(@color-secundario);
+    background-color:@color-secundario;
 }
 div#contenedors{
-    background-color: var(@color-principal);
+    background-color:@color-principal;
 }
 
-input:checked ~ ul{
-   color:red;
-   
-}
+
 
 body{
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;

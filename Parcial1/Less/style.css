@@ -63,13 +63,10 @@ html {
   border-radius: 5%;
 }
 input:checked + div#contenedors {
-  background-color: var(aqua);
+  background-color: aqua;
 }
 div#contenedors {
-  background-color: var(blue);
-}
-input:checked ~ ul {
-  color: red;
+  background-color: blue;
 }
 body {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
