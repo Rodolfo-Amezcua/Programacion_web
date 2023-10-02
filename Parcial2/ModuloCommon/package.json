@@ -1,0 +1,19 @@
+{
+  "name": "modulocommon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Areas.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "figures": "^5.0.0",
+    "relevant-animals": "^1.1.3"
+  },
+  "devDependencies": {
+    "mastodonte": "^2.0.2"
+  }
+}
