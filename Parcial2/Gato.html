@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
 <style>
     * {
@@ -35,12 +34,12 @@
         border: 1px dashed blue;
         text-align: center;
         font-size: 50px;
-
     }
-   button{
-    width: 100px;
-    height: 50px;
-   }
+
+    button{
+        width: 100px;
+        height: 50px;
+    }
 
     /*#caja1{
         grid-column-start: 1;
@@ -67,93 +66,43 @@
         </div>
         <div id="caja11" class="botones"></div>
         <div id="caja12" class="botones"></div>
-
-
     </div>
     
 </body>
+
 <script>
-    var Alien = document.createElement("img");
-    Alien.src = "https://s3.amazonaws.com/dam.smashmexico.com.mx/wp-content/uploads/2023/07/alien-como-ver-en-orden-cronologico-792x444.jpg";
-    Alien.style.width = "100%";
-    Alien.style.height = "100%";
+var Alien = document.createElement("img");
+Alien.src = "https://s3.amazonaws.com/dam.smashmexico.com.mx/wp-content/uploads/2023/07/alien-como-ver-en-orden-cronologico-792x444.jpg";
+Alien.style.width = "100%";
+Alien.style.height = "100%";
 
-    var Depredador = document.createElement("img");
-    Depredador.src = "https://depor.com/resizer/m1-pbPcedUd_G0T-szv2AED7-I4=/580x330/smart/filters:format(jpeg):quality(90)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/Q5TJ74FRLFHJRBXEQFUBXBS5GE.jpg";
-    Depredador.style.width = "100%";
-    Depredador.style.height = "100%";
+var Depredador = document.createElement("img");
+Depredador.src = "https://depor.com/resizer/m1-pbPcedUd_G0T-szv2AED7-I4=/580x330/smart/filters:format(jpeg):quality(90)/cloudfront-us-east-1.images.arcpublishing.com/elcomercio/Q5TJ74FRLFHJRBXEQFUBXBS5GE.jpg";
+Depredador.style.width = "100%";
+Depredador.style.height = "100%";
 
-    var xo = Alien;
-    var ganador = null;
-    var turno = "Alien";
-    var tablero = ["", "", "", "", "", "", "", "", ""];
+var xo = Alien;
 
-    var cajas = document.querySelectorAll(".caja");
-
-    cajas.forEach(function (caja, index) {
-        caja.addEventListener("click", function () {
-            if (!ganador && !tablero[index]) {
-                tablero[index] = turno;
-                caja.appendChild(xo.cloneNode());
-                ganador = verificarGanador();
-                if (ganador) {
-                    // Muestra primero la jugada ganadora y luego el mensaje de alerta
-                    mostrarJugadaGanadora(caja, ganador);
-                } else {
-                    turno = turno === "Alien" ? "Depredador" : "Alien";
-                    xo = turno === "Alien" ? Alien : Depredador;
-                }
-            }
-        });
-    });
-
-    document.getElementById("btnLim").addEventListener("click", function () {
-        cajas.forEach(function (caja) {
-            caja.innerHTML = "";
-        });
-        ganador = null;
-        turno = "Alien";
-        xo = Alien;
-        tablero = ["", "", "", "", "", "", "", "", ""];
-    });
-
-    function verificarGanador() {
-        var combinacionesGanadoras = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6]
-        ];
-
-        for (var combinacion of combinacionesGanadoras) {
-            var a = tablero[combinacion[0]];
-            var b = tablero[combinacion[1]];
-            var c = tablero[combinacion[2]];
-            if (a === b && b === c && a !== "") {
-                return a;
+document.getElementById("cont").addEventListener("click", function(e){
+    if (e.target.classList.contains("caja")) {
+        if (e.target.innerText === "") {
+            if (xo === Alien) {
+                e.target.appendChild(Depredador.cloneNode());
+                xo = Depredador;
+            } else {
+                e.target.appendChild(Alien.cloneNode());
+                xo = Alien;
             }
         }
-
-        if (tablero.includes("")) {
-            return null; // Todavía no hay ganador, el juego continúa
-        } else {
-            return "Empate"; // Empate
-        }
     }
+});
 
-    function mostrarJugadaGanadora(cajaGanadora, ganador) {
-        var ganadorImg = ganador === "Alien" ? Alien : Depredador;
-        cajaGanadora.innerHTML = "";
-        cajaGanadora.appendChild(ganadorImg.cloneNode());
-        setTimeout(function () {
-            alert("¡El ganador es " + ganador + "!");
-        }, 500); // Retraso de 0.5 segundos antes de mostrar el mensaje de alerta
+document.getElementById("btnLim").addEventListener("click",function(){
+    let cajas = document.getElementsByClassName("caja");
+    for (const elemento of cajas){
+        elemento.innerHTML = "";
     }
-
+    xo = Alien; // Restablece la imagen a Alien
+});
 </script>
-
 </html>
