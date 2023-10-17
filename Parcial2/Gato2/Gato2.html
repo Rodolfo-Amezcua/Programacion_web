@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Gato2</title>
+    <script src="node_modules/sweetalert/dist/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="node_modules/sweetalert/dist/sweetalert.css">
 </head>
 <style>
     * {
         box-sizing: border-box;
         margin: 0;
-        height: 0;
-
+        padding: 0;
     }
 
     .contenedor {
@@ -27,28 +27,19 @@
     }
 
     .caja {
-
-       height: 100%; 
-       width: 100%;
+        height: 100%; 
+        width: 100%;
         background-color: aqua;
         border: 1px dashed blue;
         text-align: center;
         font-size: 50px;
     }
 
-    button{
+    button {
         width: 100px;
         height: 50px;
     }
-
-    /*#caja1{
-        grid-column-start: 1;
-        grid-column-end: 3;
-        align-self: start;
-    }*/
 </style>
-</head>
-
 <body>
     <div id="cont" class="contenedor">
         <div id="caja1" class="caja"></div>
@@ -61,15 +52,12 @@
         <div id="caja8" class="caja"></div>
         <div id="caja9" class="caja"></div>
         <div id="caja10" class="botones">
-            
             <button type="button" id="btnLim">Limpiar</button>
         </div>
         <div id="caja11" class="botones"></div>
         <div id="caja12" class="botones"></div>
     </div>
-    
 </body>
-</script>
 <script>
     var Alien = document.createElement("img");
     Alien.src = "https://s3.amazonaws.com/dam.smashmexico.com.mx/wp-content/uploads/2023/07/alien-como-ver-en-orden-cronologico-792x444.jpg";
@@ -95,7 +83,6 @@
                 caja.appendChild(xo.cloneNode());
                 ganador = verificarGanador();
                 if (ganador) {
-                    // Muestra primero la jugada ganadora y luego el mensaje de alerta
                     mostrarJugadaGanadora(caja, ganador);
                 } else {
                     turno = turno === "Alien" ? "Depredador" : "Alien";
@@ -137,9 +124,9 @@
         }
 
         if (tablero.includes("")) {
-            return null; // Todavía no hay ganador, el juego continúa
+            return null;
         } else {
-            return "Empate"; // Empate
+            return "Empate";
         }
     }
 
@@ -148,9 +135,22 @@
         cajaGanadora.innerHTML = "";
         cajaGanadora.appendChild(ganadorImg.cloneNode());
         setTimeout(function () {
-            alert("¡El ganador es " + ganador + "!");
-        }, 500); // Retraso de 0.5 segundos antes de mostrar el mensaje de alerta
+            swal("¡El ganador es " + ganador + "!", "", "success").then((value) => {
+                if (value) {
+                    reiniciarJuego();
+                }
+            });
+        }, 500);
+    }
+
+    function reiniciarJuego() {
+        cajas.forEach(function (caja) {
+            caja.innerHTML = "";
+        });
+        ganador = null;
+        turno = "Alien";
+        xo = Alien;
+        tablero = ["", "", "", "", "", "", "", "", ""];
     }
 </script>
-
 </html>
