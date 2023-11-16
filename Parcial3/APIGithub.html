@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Lista de Repositorios de GitHub</title>
+    <style>
+        body {
+            background-image: url("https://2.bp.blogspot.com/-I2FuffD18EE/UAYVvnctAsI/AAAAAAAACi8/a-aO7VaS1u0/s1600/1920-1200-67197.jpg");
+            color: white;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .content-wrapper {
+            border: 2px solid white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            max-width: 400px;
+            margin: 50px auto;
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: red; /* Color rojo para el título */
+        }
+
+        #repos-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="content-wrapper">
+        <h1>Lista de Repositorios de GitHub</h1>
+        <ul id="repos-list"></ul>
+        <script>
+            const username = "Rodolfo-Amezcua";
+            const token = "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";
+
+            const reposList = document.getElementById("repos-list");
+
+            const headers = new Headers({
+                "Authorization": `token ${token}`
+            });
+
+            fetch(`https://api.github.com/users/${username}/repos`, {
+                    headers
+                })
+                .then((response) => response.json())
+                .then((repos) => {
+                    repos.forEach((repo) => {
+                        const li = document.createElement("li");
+                        li.textContent = repo.name;
+                        reposList.appendChild(li);
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error al conectar a la API de GitHub: " + error);
+                });
+        </script>
+    </div>
+</body>
+
+</html>
