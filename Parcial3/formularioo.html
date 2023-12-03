@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Formulario</title>
+</head>
+<body style="background-color: purple; text-align: center;">
+
+<div class="container mt-5 bg-light">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form>
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" class="form-control" id="nombre" placeholder="Ingrese su nombre" name="nombre">
+                </div>
+                <div class="form-group">
+                    <label for="apellido">Apellido:</label>
+                    <input type="text" class="form-control" id="apellido" placeholder="Ingrese apellido" name="apellido">
+                </div>
+               
+                <div class="form-group">
+                    <label for="edad">Edad:</label>
+                    <input type="number" class="form-control" id="edad" placeholder="Ingrese su edad" name="edad">
+                </div>
+                <div class="form-group">
+                    <label for="fecha">Fecha:</label>
+                    <input type="date" class="form-control" id="fecha" placeholder="Ingrese fecha" name="fecha">
+                    
+                </div>
+                <button type="button" class="btn btn-dark" id="btn_peticion">CONSULTAR</button>
+                <button type="button" class="btn btn-dark" id="btn_eliminar">ELIMINAR</button>
+            </form>
+            <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+            <script>
+                document.getElementById("btn_peticion").addEventListener("click", async () => {
+            let id = prompt("ID del alumno");
+ 
+            let response = await fetch(`http://localhost:8082/ALUMNO?alumno_id=${id}`, { method: 'GET' });
+ 
+            let data = await response.json();
+ 
+            console.log(data)
+ 
+            if (data.status == 0) {
+                alert(data.mensaje);
+                console.log(data.status)
+            } else {
+                console.log(data.datos);
+                console.log(data.status);
+ 
+                document.getElementById("nombre").value = data.datos.nombre;
+                document.getElementById("apellido").value = data.datos.apellido;
+                document.getElementById("edad").value = data.datos.edad;
+                let fechaNacimiento = new Date(data.datos.fecha);
+                let formattedFechaNacimiento = fechaNacimiento.toISOString().split('T')[0];
+                document.getElementById("fecha").value = formattedFechaNacimiento;
+ 
+                
+                
+            }
+        });
+             </script>
+             
+           
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

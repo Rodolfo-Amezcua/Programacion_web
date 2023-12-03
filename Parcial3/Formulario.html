@@ -1,0 +1,175 @@
+<!-- Tu comentario aquí 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet">
+</head>
+<body>
+    <script>
+        const grid = new gridjs.Grid({
+          columns: ['nombre', 'apellido','edad', 'fecha'],
+          server: {
+            url: 'http://localhost:8082/ALUMNO',
+            then: data => data.map(alumno => [alumno.NOMBRE, alumno.APELLIDO, alumno.EDAD,alumno.FECHA])
+          }
+        }).render(document.getElementById("table"));
+    </script>
+    <form id="miFormulario" method="GET">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+ 
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" name="apellido" required><br><br>
+ 
+        <label for="edad">Edad:</label>
+        <input type="text" id="edad" name="edad" required><br><br>
+
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required><br><br>
+
+       
+        <button type="button" id="btnConsultar">Consultar</button>
+    </form>
+ 
+    <script>
+        document.getElementById("btnConsultar").addEventListener("click", async () => {
+            let id = prompt("ID del alumno");
+ 
+            let response = await fetch(`http://localhost:8082/ALUMNO?ALUMNO_ID=${id}`, { method: 'GET' });
+ 
+            let data = await response.json();
+ 
+            console.log(data)
+ 
+            if (data.status == 0) {
+                alert(data.mensaje);
+                console.log(data.status)
+            } else {
+                console.log(data.datos);
+                console.log(data.status);
+ 
+                document.getElementById("nombre").value = data.datos.NOMBRE;
+                document.getElementById("apellido").value = data.datos.APELLIDO;
+                document.getElementById("edad").value = data.datos.EDAD;
+                let fechaNacimiento = new Date(data.datos.FECHA);
+                let formattedFechaNacimiento = fechaNacimiento.toISOString().split('T')[0];
+                document.getElementById("fecha").value = formattedFechaNacimiento;
+ 
+                
+                
+            }
+        });
+    </script>
+</body>
+</html> 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+   
+    <form id="miFormulario" method="GET">
+        <label for="alumno_id">Id del alumno:</label>
+        <input type="text" id="alumno_id" name="alumno_id" required><br><br>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+ 
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" name="apellido" required><br><br>
+ 
+        <label for="edad">Edad:</label>
+        <input type="text" id="edad" name="edad" required><br><br>
+
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required><br><br>
+
+       
+        <button type="button" id="btnConsultar">Consultar</button>
+        <button type="button" id="btnInsertar">Insertar</button>
+        <button type="button" id="btnEliminar">Eliminar</button>
+
+    </form>
+ 
+    <script>
+        document.getElementById("btnConsultar").addEventListener("click", async () => {
+            let id = prompt("ID del alumno");
+ 
+            let response = await fetch(`http://localhost:8082/ALUMNO?ALUMNO_ID=${id}`, { method: 'GET' });
+ 
+            let data = await response.json();
+ 
+            console.log(data)
+ 
+            if (data.status == 0) {
+                alert(data.mensaje);
+                console.log(data.status)
+            } else {
+                console.log(data.datos);
+                console.log(data.status);
+ 
+                document.getElementById("alumno_id").value=data.datos.ALUMNO_ID;
+                document.getElementById("nombre").value = data.datos.NOMBRE;
+                document.getElementById("apellido").value = data.datos.APELLIDO;
+                document.getElementById("edad").value = data.datos.EDAD;
+                let fechaNacimiento = new Date(data.datos.FECHA);
+                let formattedFechaNacimiento = fechaNacimiento.toISOString().split('T')[0];
+                document.getElementById("fecha").value = formattedFechaNacimiento;
+ 
+
+
+                
+            }
+        });
+        document.getElementById("btnEliminar").addEventListener("click",async()=>{
+                
+                let id= prompt("ID");
+
+                 let response = await fetch(`http://localhost:8082/ALUMNO?ALUMNO_ID=${id}`, {method:"DELETE"});
+                
+                 
+                 let data = await response.json();
+                 console.log(data)
+
+                 if(data.status==0){
+                    alert(data.mensaje);
+                    console.log(data.status);
+                 }else{
+                    alert(data.mensaje);
+                    console.log(data.datos);
+                    console.log(data.status);
+                 }
+
+                });
+
+
+                document.getElementById("btnInsertar").addEventListener("click", async () => {
+                    let FALUMNO_ID = document.getElementById("alumno_id").value;
+                    let FNOMBRE = document.getElementById("nombre").value;
+                    let FAPELLIDO = document.getElementById("apellido").value;
+                    let FEDAD = document.getElementById("edad").value;
+                    let FFEHCA = document.getElementById("fecha").value;
+                    
+                    await fetch(`http://localhost:8082/ALUMNO?ALUMNO_ID=${FALUMNO_ID}&NOMBRE=${FNOMBRE}&APELLIDO=${FAPELLIDO}&EDAD=${FEDAD}&FECHA=${FFEHCA}`, {method:"POST"})
+                        .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 1) {
+                                    alert(data.mensaje);
+                                } else {
+                                    alert(data.mensaje);
+                                }
+                            })
+                
+                });
+    </script>
+</body>
+</html> 
