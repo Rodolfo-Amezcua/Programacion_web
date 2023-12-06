@@ -15,7 +15,7 @@
           columns: ['ALUMNO_ID', 'NOMBRE', 'APELLIDO', 'EDAD', 'FECHA'],
           server: {
               url: 'http://localhost:8082/alumno',
-              then: data => data.map(alumno => 
+              then: data => data.datos.map(alumno => 
               [alumno.ALUMNO_ID, alumno.NOMBRE , alumno.APELLIDO, alumno.EDAD, alumno.FECHA]
               )
           } 

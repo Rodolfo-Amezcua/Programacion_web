@@ -24,32 +24,38 @@
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
     <script>
-        $('#table').bootstrapTable({
-            url: 'http://localhost:8082/ALUMNO',
-            columns: [{
-                field: 'ALUMNO_ID',
-                title: 'ID'
-            },
-             {
-                field: 'NOMBRE',
-                title: 'Nombre'
-            },
-             {
-                field: 'APELLIDO',
-                title: 'Apellido'
-            },
-            {
-                field: 'EDAD',
-                title: 'Edad'
-            },
-            {
-                field: 'FECHA',
-                title: 'Fecha'
-            }
-                
-        
-        ]
-        }) 
+       $('#table').bootstrapTable({
+    url: 'http://localhost:8082/ALUMNO',
+    responseHandler: function (res) {
+        return res.datos; // Accede directamente a los datos bajo la clave 'datos'
+    },
+    columns: [
+        {
+            field: 'ALUMNO_ID',
+            title: 'ID'
+        },
+        {
+            field: 'NOMBRE',
+            title: 'Nombre'
+        },
+        {
+            field: 'APELLIDO',
+            title: 'Apellido'
+        },
+        {
+            field: 'EDAD',
+            title: 'Edad'
+        },
+        {
+            field: 'FECHA',
+            title: 'Fecha'
+        }
+    ],
+    onLoadError: function (status, res) {
+        console.log('Error al cargar los datos:', status, res);
+    }
+});
+
     </script>
 </body>
 

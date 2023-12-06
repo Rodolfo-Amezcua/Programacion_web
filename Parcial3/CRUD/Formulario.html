@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css">
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+
+    <style>
+        
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: plum;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        button {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+
+
+
+</head>
+<body>
+   
+    <form id="miFormulario" method="GET">
+        <label for="alumno_id">Id del alumno:</label>
+        <input type="text" id="alumno_id" name="alumno_id" required><br><br>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+ 
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" name="apellido" required><br><br>
+ 
+        <label for="edad">Edad:</label>
+        <input type="text" id="edad" name="edad" required><br><br>
+
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required><br><br>
+
+       
+        <button type="button" id="btnConsultar">Consultar</button>
+        <button type="button" id="btnInsertar">Insertar</button>
+        <button type="button" id="btnEliminar">Eliminar</button>
+        <button type="button" id="btnActualizar">Actualizar</button>
+        <button type="button" id="btnpdf" onclick="saveToPdf()">PDF</button>
+
+        <table id="table">
+
+        </table>
+    
+        <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
+        <script>
+           $('#table').bootstrapTable({
+        url: 'http://localhost:8082/ALUMNO',
+        responseHandler: function (res) {
+            return res.datos; // Accede directamente a los datos bajo la clave 'datos'
+        },
+        columns: [
+            {
+                field: 'ALUMNO_ID',
+                title: 'ID'
+            },
+            {
+                field: 'NOMBRE',
+                title: 'Nombre'
+            },
+            {
+                field: 'APELLIDO',
+                title: 'Apellido'
+            },
+            {
+                field: 'EDAD',
+                title: 'Edad'
+            },
+            {
+                field: 'FECHA',
+                title: 'Fecha'
+            }
+        ],
+        onLoadError: function (status, res) {
+            console.log('Error al cargar los datos:', status, res);
+        }
+    });
+    
+        </script>
+
+    </form>
+ 
+    <script>
+         async function loadTableData() {
+        try {
+            let response = await fetch('http://localhost:8082/ALUMNO');
+            let data = await response.json();
+
+            // Limpia la tabla antes de cargar nuevos datos
+            $('#table').bootstrapTable('removeAll');
+
+            // Carga los nuevos datos
+            $('#table').bootstrapTable('load', data.datos);
+        } catch (error) {
+            console.error('Error al cargar los datos:', error);
+        }
+    }
+
+
+        document.getElementById("btnConsultar").addEventListener("click", async () => {
+            let id = prompt("ID del alumno");
+ 
+            let response = await fetch(`http://localhost:8082/ALUMNO?ALUMNO_ID=${id}`, { method: 'GET' });
+ 
+            let data = await response.json();
+ 
+            console.log(data)
+ 
+            if (data.status == 0) {
+                alert(data.mensaje);
+                console.log(data.status)
+            } else {
+                console.log(data.datos);
+                console.log(data.status);
+ 
+                document.getElementById("alumno_id").value=data.datos.ALUMNO_ID;
+                document.getElementById("nombre").value = data.datos.NOMBRE;
+                document.getElementById("apellido").value = data.datos.APELLIDO;
+                document.getElementById("edad").value = data.datos.EDAD;
+                let fechaNacimiento = new Date(data.datos.FECHA);
+                let formattedFechaNacimiento = fechaNacimiento.toISOString().split('T')[0];
+                document.getElementById("fecha").value = formattedFechaNacimiento;
+                await loadTableData();
+
+
+                
+            }
+        });
+        document.getElementById("btnEliminar").addEventListener("click",async()=>{
+                
+                let id= prompt("ID");
+
+                 let response = await fetch(`http://localhost:8082/ALUMNO?ALUMNO_ID=${id}`, {method:"DELETE"});
+                
+                 
+                 let data = await response.json();
+                 console.log(data)
+
+                 if(data.status==0){
+                    alert(data.mensaje);
+                    console.log(data.status);
+                 }else{
+                    alert(data.mensaje);
+                    console.log(data.datos);
+                    console.log(data.status);
+                 }
+                 await loadTableData();
+                });
+
+
+                document.getElementById("btnInsertar").addEventListener("click", async () => {
+                    let FALUMNO_ID = document.getElementById("alumno_id").value;
+                    let FNOMBRE = document.getElementById("nombre").value;
+                    let FAPELLIDO = document.getElementById("apellido").value;
+                    let FEDAD = document.getElementById("edad").value;
+                    let FFEHCA = document.getElementById("fecha").value;
+                    
+                    await fetch(`http://localhost:8082/ALUMNO?ALUMNO_ID=${FALUMNO_ID}&NOMBRE=${FNOMBRE}&APELLIDO=${FAPELLIDO}&EDAD=${FEDAD}&FECHA=${FFEHCA}`, {method:"POST"})
+                        .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 1) {
+                                    alert(data.mensaje);
+                                } else {
+                                    alert(data.mensaje);
+                                }
+                            })
+                            await loadTableData();
+                });
+
+                document.getElementById("btnActualizar").addEventListener("click", async () => {
+                let id = document.getElementById("alumno_id").value;
+                let nombre = document.getElementById("nombre").value;
+                let apellido = document.getElementById("apellido").value;
+                let edad = document.getElementById("edad").value;
+                let fecha = document.getElementById("fecha").value;
+                
+
+                await fetch(`http://localhost:8082/alumno?ALUMNO_ID=${id}&NOMBRE=${nombre}&APELLIDO=${apellido}&EDAD=${edad}&FECHA=${fecha}`, { method: "PUT" })
+
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 1) {
+                            alert(data.mensaje);
+                        } else {
+                            alert(data.mensaje);
+                        }
+                    })
+                    await loadTableData();
+            });
+
+           
+
+            
+    </script>
+    <script>
+     function saveToPdf() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+ 
+  // Título del PDF
+  pdf.text('Datos del ALUMNO:', 10, 10);
+ 
+  // Obtiene los datos del formulario
+  const alumno_id = document.getElementById('alumno_id').value;
+  const nombre = document.getElementById('nombre').value;
+  const apellido = document.getElementById('apellido').value;
+  const edad = document.getElementById('edad').value;
+  const fecha = document.getElementById('fecha').value;
+ 
+  // Muestra los datos en el PDF
+  pdf.text(`Alumno_id: ${alumno_id}`, 10, 20);
+  pdf.text(`Nombre: ${nombre}`, 10, 30);
+  pdf.text(`Apellido: ${apellido}`, 10, 40);
+  pdf.text(`Edad: ${edad}`, 10, 60);
+  pdf.text(`Fecha: ${fecha}`, 10, 70);
+ 
+  // Guarda el PDF
+  pdf.save('datos_estudiante.pdf');
+}
+    </script>
+</body>
+</html> 
